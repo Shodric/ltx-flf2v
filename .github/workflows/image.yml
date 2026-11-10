@@ -3,6 +3,13 @@ name: image
 on:
   push:
     branches: [main]
+    paths:
+      - Dockerfile
+      - requirements.txt
+      - handler.py
+      - workflow.py
+      - models.py
+      - .dockerignore
 
 permissions:
   contents: read

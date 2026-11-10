@@ -1,0 +1,28 @@
+name: make-public
+
+on:
+  push:
+    paths:
+      - .github/workflows/make-public.yml
+  workflow_dispatch:
+
+permissions:
+  packages: write
+
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set the container package public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          for path in \
+            /user/packages/container/ltx-flf2v/visibility \
+            /users/Shodric/packages/container/ltx-flf2v/visibility
+          do
+            code=$(gh api --method PUT -H "Accept: application/vnd.github+json" \
+              "$path" -f visibility=public --silent -i | awk '/^HTTP/{print $2; exit}')
+            echo "PUT $path -> ${code:-none}"
+          done
