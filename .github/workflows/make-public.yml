@@ -18,11 +18,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set +e
-          for path in \
-            /user/packages/container/ltx-flf2v/visibility \
-            /users/Shodric/packages/container/ltx-flf2v/visibility
-          do
-            code=$(gh api --method PUT -H "Accept: application/vnd.github+json" \
-              "$path" -f visibility=public --silent -i | awk '/^HTTP/{print $2; exit}')
-            echo "PUT $path -> ${code:-none}"
-          done
+          echo "--- list ---"
+          gh api -H "Accept: application/vnd.github+json" \
+            "/users/Shodric/packages?package_type=container" \
+            --jq '.[] | {name,visibility,repository:.repository.full_name}'
+          echo "--- set ---"
+          code=$(gh api --method PUT -H "Accept: application/vnd.github+json" \
+            /users/Shodric/packages/container/ltx-flf2v/visibility \
+            -f visibility=public --silent -i | awk '/^HTTP/{print $2; exit}')
+          echo "PUT visibility -> ${code:-none}"
