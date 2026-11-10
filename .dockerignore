@@ -1,0 +1,6 @@
+.git
+**/__pycache__
+**/*.pyc
+test_workflow.py
+README.md
+.runpod
