@@ -26,7 +26,8 @@ RUN git init /opt/ComfyUI \
 
 WORKDIR /opt/worker
 COPY requirements.txt handler.py workflow.py models.py ./
-RUN pip install --no-cache-dir -r requirements.txt
+# --ignore-installed: the base image ships Debian cryptography with no RECORD.
+RUN pip install --no-cache-dir --ignore-installed -r requirements.txt
 
 EXPOSE 8188
 ENTRYPOINT []
